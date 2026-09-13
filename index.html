@@ -3,68 +3,89 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#0b0b0f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="ChatGPT">
-<link rel="manifest" href="manifest.webmanifest">
-<title>ChatGPT — быстрые действия</title>
+<meta name="apple-mobile-web-app-title" content="AI Помощник">
+<link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icon.svg">
+<title>AI Помощник</title>
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f5f5f7;color:#171717;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Arial,sans-serif}
-.wrap{max-width:720px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom))}
-header{padding:8px 4px 18px}h1{font-size:30px;margin:0 0 5px;letter-spacing:-.7px}header p{margin:0;color:#6b6b70}
-.card{background:#fff;border:1px solid #e5e5e7;border-radius:20px;padding:14px;box-shadow:0 4px 20px #00000008}
-textarea{width:100%;min-height:190px;border:0;outline:0;resize:vertical;font:17px/1.5 inherit;padding:8px;background:transparent;color:inherit}
-.counter{font-size:12px;color:#8a8a8f;padding:4px 8px 8px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-button{border:0;border-radius:15px;padding:14px 10px;font:600 15px inherit;cursor:pointer;background:#111;color:#fff}
-button.secondary{background:#e9e9ed;color:#171717}
-button:active{transform:scale(.98)}
-.actions{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.note{font-size:13px;line-height:1.45;color:#6b6b70;margin:14px 4px}
-#toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);opacity:0;background:#111;color:#fff;padding:11px 15px;border-radius:999px;font-size:14px;transition:.2s;pointer-events:none}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-@media(max-width:380px){h1{font-size:27px}.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}}
+:root{--bg:#08090d;--card:#12141b;--card2:#181b24;--text:#f7f7fb;--muted:#a7adbd;--accent:#7c5cff;--line:#292d38}
+:root.light{--bg:#f5f6fa;--card:#fff;--card2:#f0f1f6;--text:#11131a;--muted:#626878;--line:#dfe2ea}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}body{margin:0;background:radial-gradient(circle at 20% -10%,#7c5cff33,transparent 32%),var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}
+.app{max-width:760px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(30px + env(safe-area-inset-bottom))}
+header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.brand{display:flex;gap:12px;align-items:center}.logo{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,#7c5cff,#3a9cff);font-size:24px}
+h1{font-size:24px;margin:0}.sub{font-size:13px;color:var(--muted);margin-top:3px}button{font:inherit;color:inherit;border:0;cursor:pointer}.iconbtn{width:44px;height:44px;border-radius:14px;background:var(--card);border:1px solid var(--line);font-size:19px}
+.hero{background:linear-gradient(145deg,var(--card),var(--card2));border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 18px 50px #0004}
+textarea{width:100%;min-height:155px;resize:vertical;border:0;outline:0;background:transparent;color:var(--text);font-size:17px;line-height:1.45;padding:4px}textarea::placeholder{color:#777d8d}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.tool{padding:10px 12px;border-radius:13px;background:var(--card);border:1px solid var(--line);font-size:13px}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.action{min-height:72px;text-align:left;padding:14px;border-radius:18px;background:var(--card);border:1px solid var(--line)}.action b{display:block;font-size:15px;margin-bottom:4px}.action span{font-size:12px;color:var(--muted)}
+.primaryAction{background:linear-gradient(135deg,#7c5cff3b,#3a9cff1f)!important;border-color:#7c5cffa0!important}
+.primary,.secondary{width:100%;padding:14px;border-radius:15px;font-weight:700;margin-top:12px}.primary{background:linear-gradient(135deg,#7c5cff,#3a9cff)}.secondary{background:var(--card2)}
+.section{margin-top:22px}.sectionHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.section h2{font-size:17px;margin:0}.link{background:none;color:#a98cff;font-size:13px}
+.templates{display:flex;gap:9px;overflow:auto;padding-bottom:3px}.template{min-width:145px;padding:13px;border-radius:17px;background:var(--card);border:1px solid var(--line);text-align:left}.template b{font-size:13px;display:block;margin-bottom:5px}.template span{font-size:11px;color:var(--muted)}
+.history{display:grid;gap:8px}.historyItem{padding:12px 14px;border:1px solid var(--line);background:var(--card);border-radius:15px;display:flex;gap:10px;align-items:center}.historyText{flex:1;min-width:0}.historyText b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.historyText span{font-size:11px;color:var(--muted)}.mini{width:35px;height:35px;border-radius:11px;background:var(--card2)}
+.empty{color:var(--muted);font-size:13px;padding:12px 2px}.sheet{position:fixed;inset:0;background:#0009;display:none;align-items:flex-end;z-index:10}.sheet.open{display:flex}.panel{width:100%;max-width:760px;margin:auto;background:var(--card);border-radius:26px 26px 0 0;padding:18px 16px calc(22px + env(safe-area-inset-bottom));border:1px solid var(--line)}
+.settingRow{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}.settingRow small{display:block;color:var(--muted);margin-top:3px}.toggle{padding:9px 12px;border-radius:12px;background:var(--card2)}.toast{position:fixed;left:50%;bottom:25px;transform:translate(-50%,20px);opacity:0;background:#222633;color:#fff;padding:11px 15px;border-radius:13px;font-size:13px;transition:.2s;z-index:20}.toast.show{opacity:1;transform:translate(-50%,0)}input[type=file]{display:none}
+@media(min-width:600px){.actions{grid-template-columns:repeat(4,1fr)}}
 </style>
 </head>
 <body>
-<main class="wrap">
-<header><h1>ChatGPT</h1><p>Быстрые действия с твоим текстом</p></header>
-<section class="card">
-<textarea id="text" placeholder="Вставь сюда текст…"></textarea>
-<div class="counter" id="counter">0 символов</div>
-</section>
-<div class="grid">
-<button data-mode="explain">💡 Объяснить</button>
-<button data-mode="shorten">✂️ Сократить</button>
-<button data-mode="translate">🌐 Перевести</button>
-<button data-mode="ask">❓ Разобраться</button>
-</div>
+<div class="app">
+<header><div class="brand"><div class="logo">✦</div><div><h1>AI Помощник</h1><div class="sub">Твой быстрый помощник для ChatGPT</div></div></div><button class="iconbtn" id="settings">⚙️</button></header>
+<section class="hero">
+<textarea id="input" placeholder="Напиши вопрос, вставь текст или используй голос…"></textarea>
+<div class="tools"><button class="tool" id="voice">🎤 Голос</button><label class="tool" for="file">📎 Файл / фото</label><input id="file" type="file" accept="image/*,.txt,.md,.csv,.json,.pdf"><button class="tool" id="clear">⌫ Очистить</button></div>
 <div class="actions">
-<button class="secondary" id="copy">Копировать запрос</button>
-<button id="open">Открыть ChatGPT</button>
+<button class="action primaryAction" data-a="ask"><b>💬 Спросить</b><span>Открыть вопрос в ChatGPT</span></button>
+<button class="action" data-a="explain"><b>🧠 Объяснить</b><span>Простыми словами + примеры</span></button>
+<button class="action" data-a="write"><b>📝 Написать</b><span>Создать или улучшить текст</span></button>
+<button class="action" data-a="shorten"><b>✂️ Сократить</b><span>Оставить главное</span></button>
+<button class="action" data-a="translate"><b>🌍 Перевести</b><span>Естественный перевод</span></button>
+<button class="action" data-a="study"><b>📚 Учёба</b><span>Разобрать и проверить себя</span></button>
+<button class="action" data-a="ideas"><b>💡 Идеи</b><span>Мозговой штурм</span></button>
+<button class="action" data-a="code"><b>💻 Код</b><span>Написать или исправить</span></button>
 </div>
-<p class="note">Текст не отправляется на сторонний сервер этим приложением. При нажатии «Открыть ChatGPT» запрос передаётся сайту ChatGPT через ссылку.</p>
-</main>
-<div id="toast"></div>
+<button class="primary" id="open">🚀 Открыть ChatGPT с запросом</button><button class="secondary" id="copy">📋 Скопировать запрос</button>
+</section>
+<section class="section"><div class="sectionHead"><h2>✨ Готовые шаблоны</h2></div><div class="templates">
+<button class="template" data-t="homework"><b>📖 Домашка</b><span>Понять тему, а не просто ответ</span></button>
+<button class="template" data-t="summary"><b>🗒️ Конспект</b><span>Структурировать текст</span></button>
+<button class="template" data-t="plan"><b>🗓️ План</b><span>Разложить по шагам</span></button>
+<button class="template" data-t="brainstorm"><b>🚀 Идеи</b><span>Найти разные варианты</span></button>
+</div></section>
+<section class="section"><div class="sectionHead"><h2>🕘 История</h2><button class="link" id="clearHistory">Очистить</button></div><div id="history" class="history"></div></section>
+</div>
+<div class="sheet" id="sheet"><div class="panel"><h3>Настройки</h3>
+<div class="settingRow"><div><b>Тема</b><small>Авто, светлая или тёмная</small></div><button class="toggle" id="theme">Авто</button></div>
+<div class="settingRow"><div><b>Сохранять историю</b><small>Только на этом устройстве</small></div><button class="toggle" id="hist">Вкл.</button></div>
+<div class="settingRow"><div><b>О приложении</b><small>Без API-ключей и стороннего сервера</small></div></div>
+<button class="secondary" id="close">Закрыть</button></div></div>
+<div class="toast" id="toast"></div>
 <script>
-const text=document.getElementById('text'), counter=document.getElementById('counter'), toast=document.getElementById('toast');
-let mode='explain';
-const prompts={
- explain:'Объясни следующий текст простыми словами. Если есть сложные термины, объясни их тоже.\\n\\n',
- shorten:'Кратко перескажи следующий текст, сохранив главные мысли и важные факты.\\n\\n',
- translate:'Переведи следующий текст на русский язык. Сохрани смысл и естественную формулировку.\\n\\n',
- ask:'Помоги разобраться со следующим текстом. Дай понятный ответ и выдели главное.\\n\\n'
-};
-function update(){counter.textContent=text.value.length.toLocaleString('ru-RU')+' символов'}
-function show(s){toast.textContent=s;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)}
-function request(){return prompts[mode]+text.value.trim()}
-document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;if(!text.value.trim()){show('Сначала вставь текст');text.focus();return}openChat()});
-text.addEventListener('input',update);
-document.getElementById('copy').onclick=async()=>{if(!text.value.trim()){show('Сначала вставь текст');return}try{await navigator.clipboard.writeText(request());show('Запрос скопирован')}catch{show('Не удалось скопировать')}};
-document.getElementById('open').onclick=openChat;
-function openChat(){if(!text.value.trim()){show('Сначала вставь текст');text.focus();return}window.location.href='https://chatgpt.com/?q='+encodeURIComponent(request())}
-update();
-</script>
-</body>
-</html>
+const $=s=>document.querySelector(s), input=$('#input'),toast=$('#toast');
+const p={
+ask:t=>t,explain:t=>`Объясни следующую тему простыми словами. Разбей на пункты, приведи 2 примера и дай краткое резюме.\\n\\n${t}`,
+write:t=>`Помоги написать или улучшить текст ниже. Сохрани смысл, сделай язык естественным и грамотным.\\n\\n${t}`,
+shorten:t=>`Сократи текст, сохранив ключевые мысли и факты. Дай краткую версию и 3–5 главных пунктов.\\n\\n${t}`,
+translate:t=>`Переведи текст на русский естественно и понятно, сохранив смысл и структуру.\\n\\n${t}`,
+study:t=>`Помоги разобраться с темой для учёбы: объясни по шагам, выдели ключевые понятия, приведи пример и задай 3 проверочных вопроса без ответов.\\n\\n${t}`,
+ideas:t=>`Проведи мозговой штурм: предложи минимум 8 разных идей, сгруппируй их и выдели 2 самых перспективных.\\n\\n${t}`,
+code:t=>`Помоги с программированием: разберись с задачей, предложи решение, объясни ключевые части и возможные ошибки.\\n\\n${t}`};
+const tpls={homework:'Помоги мне разобраться с домашним заданием. Не просто дай готовый ответ: объясни ход решения простыми словами и дай похожую мини-задачу для проверки.\\n\\n',summary:'Сделай структурированный конспект: главная мысль, ключевые факты, термины и вывод.\\n\\n',plan:'Составь реалистичный пошаговый план выполнения задачи.\\n\\n',brainstorm:'Придумай много разных идей по этой теме, без повторов, и выдели самые интересные.\\n\\n'};
+let hist=JSON.parse(localStorage.getItem('hist')||'[]'), enabled=localStorage.getItem('enabled')!=='0', theme=localStorage.getItem('theme')||'auto';
+function toastMsg(x){toast.textContent=x;toast.classList.add('show');clearTimeout(window.tt);window.tt=setTimeout(()=>toast.classList.remove('show'),1700)}
+function make(a){let x=input.value.trim();if(!x){toastMsg('Сначала напиши или вставь текст');input.focus();return null}return p[a](x)}
+function openChat(x){location.href='https://chatgpt.com/?q='+encodeURIComponent(x)}
+function save(x){if(!enabled)return;hist.unshift({x,time:new Date().toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit')});hist=hist.slice(0,20);localStorage.setItem('hist',JSON.stringify(hist));render()}
+function render(){let h=$('#history');if(!enabled){h.innerHTML='<div class="empty">История отключена.</div>';return}if(!hist.length){h.innerHTML='<div class="empty">Пока пусто. Здесь появятся запросы.</div>';return}h.innerHTML=hist.map((v,i)=>`<div class="historyItem"><div class="historyText"><b>${v.x.replace(/[&<>]/g,'')}</b><span>${v.time}</span></div><button class="mini" data-i="${i}">↗</button></div>`).join('');h.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>openChat(hist[+b.dataset.i].x))}
+document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{let x=make(b.dataset.a);if(x){save(x);openChat(x)}})
+$('#open').onclick=()=>{let x=make('ask');if(x){save(x);openChat(x)}};$('#copy').onclick=async()=>{let x=make('ask');if(x){await navigator.clipboard.writeText(x);toastMsg('Запрос скопирован')}};$('#clear').onclick=()=>{input.value='';input.focus()};
+document.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{input.value=tpls[b.dataset.t];input.focus();input.setSelectionRange(input.value.length,input.value.length);toastMsg('Шаблон добавлен')});
+$('#clearHistory').onclick=()=>{hist=[];localStorage.removeItem('hist');render();toastMsg('История очищена')};
+$('#file').onchange=async e=>{let f=e.target.files[0];if(!f)return;if(f.type.startsWith('text/')||/\\.(txt|md|csv|json)$/i.test(f.name)){input.value+=(input.value?'\\n\\n':'')+await f.text();toastMsg('Текст файла добавлен')}else{input.value+=(input.value?'\\n\\n':'')+`[Файл/фото: ${f.name}]\\nПрикрепи этот файл непосредственно в ChatGPT.`;toastMsg('Файл отмечен') }e.target.value=''};
+let rec=null;$('#voice').onclick=()=>{let SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toastMsg('Голосовой ввод недоступен');return}if(rec){rec.stop();return}rec=new SR();rec.lang='ru-RU';rec.interimResults=true;let old=input.value;$('#voice').textContent='⏹️ Стоп';rec.onresult=e=>{let s='';for(let r of e.results)s+=r[0].transcript;input.value=old+(old?' ':'')+s};rec.onend=()=>{rec=null;$('#voice').textContent='🎤 Голос'};rec.start()};
+function themeApply(){document.documentElement.classList.toggle('light',theme==='light'||(theme==='auto'&&matchMedia('(prefers-color-scheme:light)').matches));$('#theme').textContent=theme==='auto'?'Авто':theme==='light'?'Светлая':'Тёмная'}
+$('#theme').onclick=()=>{theme=theme==='auto'?'light':theme==='light'?'dark':'auto';localStorage.setItem('theme',theme);themeApply()};$('#hist').onclick=()=>{enabled=!enabled;localStorage.setItem('enabled',enabled?'1':'0');$('#hist').textContent=enabled?'Вкл.':'Выкл.';render()};
+$('#settings').onclick=()=>$('#sheet').classList.add('open');$('#close').onclick=()=>$('#sheet').classList.remove('open');themeApply();$('#hist').textContent=enabled?'Вкл.':'Выкл.';render();
+</script></body></html>
