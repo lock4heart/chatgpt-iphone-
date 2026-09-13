@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111111">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ChatGPT">
+<link rel="manifest" href="manifest.webmanifest">
+<title>ChatGPT — быстрые действия</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f5f7;color:#171717;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Arial,sans-serif}
+.wrap{max-width:720px;margin:auto;padding:calc(18px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom))}
+header{padding:8px 4px 18px}h1{font-size:30px;margin:0 0 5px;letter-spacing:-.7px}header p{margin:0;color:#6b6b70}
+.card{background:#fff;border:1px solid #e5e5e7;border-radius:20px;padding:14px;box-shadow:0 4px 20px #00000008}
+textarea{width:100%;min-height:190px;border:0;outline:0;resize:vertical;font:17px/1.5 inherit;padding:8px;background:transparent;color:inherit}
+.counter{font-size:12px;color:#8a8a8f;padding:4px 8px 8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+button{border:0;border-radius:15px;padding:14px 10px;font:600 15px inherit;cursor:pointer;background:#111;color:#fff}
+button.secondary{background:#e9e9ed;color:#171717}
+button:active{transform:scale(.98)}
+.actions{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.note{font-size:13px;line-height:1.45;color:#6b6b70;margin:14px 4px}
+#toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);opacity:0;background:#111;color:#fff;padding:11px 15px;border-radius:999px;font-size:14px;transition:.2s;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media(max-width:380px){h1{font-size:27px}.grid{grid-template-columns:1fr}.actions{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<header><h1>ChatGPT</h1><p>Быстрые действия с твоим текстом</p></header>
+<section class="card">
+<textarea id="text" placeholder="Вставь сюда текст…"></textarea>
+<div class="counter" id="counter">0 символов</div>
+</section>
+<div class="grid">
+<button data-mode="explain">💡 Объяснить</button>
+<button data-mode="shorten">✂️ Сократить</button>
+<button data-mode="translate">🌐 Перевести</button>
+<button data-mode="ask">❓ Разобраться</button>
+</div>
+<div class="actions">
+<button class="secondary" id="copy">Копировать запрос</button>
+<button id="open">Открыть ChatGPT</button>
+</div>
+<p class="note">Текст не отправляется на сторонний сервер этим приложением. При нажатии «Открыть ChatGPT» запрос передаётся сайту ChatGPT через ссылку.</p>
+</main>
+<div id="toast"></div>
+<script>
+const text=document.getElementById('text'), counter=document.getElementById('counter'), toast=document.getElementById('toast');
+let mode='explain';
+const prompts={
+ explain:'Объясни следующий текст простыми словами. Если есть сложные термины, объясни их тоже.\\n\\n',
+ shorten:'Кратко перескажи следующий текст, сохранив главные мысли и важные факты.\\n\\n',
+ translate:'Переведи следующий текст на русский язык. Сохрани смысл и естественную формулировку.\\n\\n',
+ ask:'Помоги разобраться со следующим текстом. Дай понятный ответ и выдели главное.\\n\\n'
+};
+function update(){counter.textContent=text.value.length.toLocaleString('ru-RU')+' символов'}
+function show(s){toast.textContent=s;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800)}
+function request(){return prompts[mode]+text.value.trim()}
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;if(!text.value.trim()){show('Сначала вставь текст');text.focus();return}openChat()});
+text.addEventListener('input',update);
+document.getElementById('copy').onclick=async()=>{if(!text.value.trim()){show('Сначала вставь текст');return}try{await navigator.clipboard.writeText(request());show('Запрос скопирован')}catch{show('Не удалось скопировать')}};
+document.getElementById('open').onclick=openChat;
+function openChat(){if(!text.value.trim()){show('Сначала вставь текст');text.focus();return}window.location.href='https://chatgpt.com/?q='+encodeURIComponent(request())}
+update();
+</script>
+</body>
+</html>
